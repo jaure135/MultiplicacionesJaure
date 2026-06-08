@@ -1,1 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>Multiplicación 3 Dígitos × 2 Dígitos</title>
+
+<style>
+
+body{
+font-family:Arial, sans-serif;
+text-align:center;
+background:#f2f2f2;
+margin:20px;
+}
+
+h1{
+margin-bottom:20px;
+}
+
+.contenedor{
+
+background:white;
+padding:20px;
+border-radius:10px;
+max-width:900px;
+margin:auto;
+box-shadow:0px 0px 10px rgba(0,0,0,.2);
+
+}
+
+input{
+
+width:100px;
+font-size:22px;
+text-align:center;
+padding:8px;
+margin:10px;
+
+}
+
+button{
+
+padding:10px 20px;
+font-size:18px;
+margin:10px;
+cursor:pointer;
+
+}
+
+#cuaderno{
+
+display:grid;
+grid-template-columns:repeat(8,60px);
+gap:2px;
+justify-content:center;
+margin-top:25px;
+
+}
+
+.celda{
+
+width:60px;
+height:60px;
+
+border:1px solid black;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+font-size:28px;
+font-weight:bold;
+
+background:white;
+
+}
+
+.linea{
+
+background:#d9d9d9;
+
+}
+
+#pasos{
+
+margin-top:25px;
+font-size:18px;
+white-space:pre-line;
+text-align:left;
+max-width:700px;
+margin-left:auto;
+margin-right:auto;
+
+}
+
+@media(max-width:700px){
+
+#cuaderno{
+
+grid-template-columns:repeat(8,42px);
+
+}
+
+.celda{
+
+width:42px;
+height:42px;
+font-size:22px;
+
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="contenedor">
+
+<h1>Multiplicación Paso a Paso</h1>
+
+<input id="num1" maxlength="3" placeholder="123">
+
+<span style="font-size:30px;">×</span>
+
+<input id="num2" maxlength="2" placeholder="45">
+
+<br>
+
+<button onclick="resolver()">Resolver</button>
+
+<button onclick="limpiar()">Limpiar</button>
+
+<div id="cuaderno"></div>
+
+<div id="pasos"></div>
+
+</div>
+
+<script>
+
+function fila(datos){
+
+let html="";
+
+for(let i=0;i<8;i++){
+
+html += `<div class="celda">${datos[i] || ""}</div>`;
+
+}
+
+return html;
+
+}
+
+function linea(){
+
+let html="";
+
+for(let i=0;i<8;i++){
+
+html += `<div class="celda linea"></div>`;
+
+}
+
+return html;
+
+}
+
+function resolver(){
+
+let n1=document.getElementById("num1").value.trim();
+
+let n2=document.getElementById("num2").value.trim();
+
+if(!/^\d{3}$/.test(n1) || !/^\d{2}$/.test(n2)){
+
+alert("Ingresa un número de 3 dígitos y otro de 2 dígitos");
+
+return;
+
+}
+
+let a=parseInt(n1);
+
+let b=parseInt(n2);
+
+let unidades=b%10;
+
+let decenas=Math.floor(b/10);
+
+let parcial1=(a*unidades).toString();
+
+let parcial2=(a*decenas).toString();
+
+let total=(a*b).toString();
+
+let html="";
+
+html += fila([
+"",
+"",
+"",
+"",
+...n1.split("")
+]);
+
+html += fila([
+"×",
+"",
+"",
+"",
+"",
+...n2.split("")
+]);
+
+html += linea();
+
+html += fila(
+
+Array(8-parcial1.length)
+.fill("")
+.concat(parcial1.split(""))
+
+);
+
+html += fila(
+
+Array(7-parcial2.length)
+.fill("")
+.concat(parcial2.split(""))
+
+);
+
+html += linea();
+
+html += fila(
+
+Array(8-total.length)
+.fill("")
+.concat(total.split(""))
+
+);
+
+document.getElementById("cuaderno").innerHTML=html;
+
+document.getElementById("pasos").innerText =
+
+"PASO 1\n"+
+"Multiplicar por las unidades ("+unidades+")\n"+
+a+" × "+unidades+" = "+(a*unidades)+
+
+"\n\nPASO 2\n"+
+"Multiplicar por las decenas ("+decenas+")\n"+
+a+" × "+decenas+" = "+(a*decenas)+
+"\nEsta fila se desplaza una columna a la izquierda por valor posicional."+
+
+
+"\n\nPASO 3\n"+
+"Sumar verticalmente los resultados parciales."+
+
+"\n\nResultado final = "+total;
+
+}
+
+function limpiar(){
+
+document.getElementById("num1").value="";
+
+document.getElementById("num2").value="";
+
+document.getElementById("cuaderno").innerHTML="";
+
+document.getElementById("pasos").innerHTML="";
+
+}
+
+</script>
+
+</body>
+</html>
